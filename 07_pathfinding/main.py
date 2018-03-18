@@ -20,7 +20,8 @@ def search(the_map, screen):
 
     while len(open_nodes) > 0:
         # Pop an open node and mark it as visited
-        current_node = open_nodes.pop()
+        open_nodes.sort(key=lambda n: n.cost_so_far + map.euclidean_distance(n.pos, the_map.goal.pos))
+        current_node = open_nodes.pop(0)
         visited_nodes.add(current_node)
 
         # If we have reached the goal, return the path
@@ -29,9 +30,13 @@ def search(the_map, screen):
 
         # Loop through the neighbours, adding unvisited neighbours to the open list
         for edge in current_node.edges:
-            if edge.to_node not in open_nodes and edge.to_node not in visited_nodes:
-                edge.to_node.came_from = current_node
-                open_nodes.append(edge.to_node)
+            if edge.to_node not in visited_nodes:
+                new_cost_so_far = current_node.cost_so_far + edge.length
+                if edge.to_node not in open_nodes or new_cost_so_far < edge.to_node.cost_so_far:
+                    edge.to_node.came_from = current_node
+                    edge.to_node.cost_so_far = new_cost_so_far
+                    if edge.to_node not in open_nodes:
+                        open_nodes.append(edge.to_node)
 
         # Redraw the map
         screen.fill((255, 255, 255))
@@ -88,7 +93,7 @@ def a_star_search(the_map, screen):
 
 
 def main():
-    tile_size = 50
+    tile_size = 100
 
     # Initialise PyGame
     pygame.init()
