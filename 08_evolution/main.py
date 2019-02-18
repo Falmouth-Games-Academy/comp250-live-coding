@@ -14,7 +14,7 @@ def draw_map_and_path(screen, the_map, path):
     screen.fill((255, 255, 255))
 
     the_map.draw(screen)
-    for i in xrange(1, len(path)):
+    for i in range(1, len(path)):
         pygame.draw.line(screen, (0, 0, 0), path[i - 1].pos, path[i].pos, 6)
 
     pygame.display.flip()
@@ -55,14 +55,30 @@ def main():
     the_map = map.Map((MAP_WIDTH, MAP_HEIGHT), tiles, TILE_SIZE, include_diagonals=True)
     fitness = calculate_fitness(the_map)
 
+    temperature = 1.0
+
     while True:
-        # TODO change the_map
+        new_tiles = tiles[:]
+        tile_index = random.randrange(len(new_tiles))
+        if new_tiles[tile_index] == ' ':
+            new_tiles[tile_index] = '*'
+        elif new_tiles[tile_index] == '*':
+            new_tiles[tile_index] = ' '
+        new_map = map.Map((MAP_WIDTH, MAP_HEIGHT), new_tiles, TILE_SIZE, include_diagonals=True)
+        new_fitness = calculate_fitness(new_map)
 
-        print "Current fitness:", fitness
-        path = get_path(the_map)
-        draw_map_and_path(screen, the_map, path)
+        if new_fitness > fitness or random.uniform(0, 1) < temperature:
+            tiles = new_tiles
+            the_map = new_map
+            fitness = new_fitness
 
-        pygame.event.get()
+            print("Current fitness:", fitness, "temperature:", temperature)
+            path = get_path(the_map)
+            draw_map_and_path(screen, the_map, path)
+
+            pygame.event.get()
+
+        temperature *= 0.99
 
 if __name__ == '__main__':
     main()

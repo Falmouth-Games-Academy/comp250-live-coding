@@ -2,7 +2,6 @@ import pygame
 import heapq
 import map
 
-
 def reconstruct_path(node):
     path = []
     while node is not None:
@@ -12,7 +11,7 @@ def reconstruct_path(node):
 
 
 def a_star_search(the_map, screen, visualise=False):
-    for node in the_map.nodes.itervalues():
+    for node in the_map.nodes.values():
         try:
             del node.g
             del node.came_from
@@ -70,6 +69,6 @@ def pull_string(the_map, path):
 
 def get_path_length(path):
     length = 0
-    for i in xrange(1, len(path)):
+    for i in range(1, len(path)):
         length += map.euclidean_distance(path[i-1].pos, path[i].pos)
     return length
