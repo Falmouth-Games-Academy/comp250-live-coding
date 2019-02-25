@@ -2,8 +2,8 @@ import random
 
 
 def heuristic(board):
-    for y in range(6):
-        for x in range(7):
+    for y in xrange(6):
+        for x in xrange(7):
             if board.get_square(x, y) != 0:
                 return (6-y) / 8.0
 
@@ -46,7 +46,7 @@ def choose_move(board):
     for move in board.get_moves():
         board.do_move(move)
         v = minimax(board, 0)
-        print(move, v)
+        print move, v
         board.undo_move(move)
         if v > best_value:
             best_value = v
@@ -54,6 +54,6 @@ def choose_move(board):
         elif v == best_value:
             best_moves.append(move)
 
-    print()
+    print
 
     return random.choice(best_moves)

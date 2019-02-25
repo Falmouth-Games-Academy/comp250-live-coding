@@ -39,7 +39,7 @@ def main():
                     if the_board.do_move(square_x):
                         played_move = True
                     else:
-                        print("Illegal move")
+                        print "Illegal move"
         else:
             # Draw text in the centre of the screen
             font = pygame.font.Font(None, 60)

@@ -15,12 +15,11 @@ class Board:
         return self.board[y*3 + x]
 
     def get_moves(self):
-        return [(x, y) for x in range(3) for y in range(3) if self.get_square(x, y) == 0]
+        return [(x, y) for x in xrange(3) for y in xrange(3) if self.get_square(x, y) == 0]
 
-    def do_move(self, xxx_todo_changeme):
+    def do_move(self, (x, y)):
         """ If the specified square is currently empty (0), fill it with mark and return True.
             If the square is not empty, leave it as-is and return False. """
-        (x, y) = xxx_todo_changeme
         if not (0 <= x < 3 and 0 <= y < 3):
             return False
 
@@ -32,9 +31,8 @@ class Board:
         else:
             return False
 
-    def undo_move(self, xxx_todo_changeme1):
+    def undo_move(self, (x, y)):
         """ Remove the mark in the specified square. """
-        (x, y) = xxx_todo_changeme1
         if 0 <= x < 3 and 0 <= y < 3:
             i = y * 3 + x
             self.board[i] = 0
@@ -50,7 +48,7 @@ class Board:
         return p if p == self.board[start+delta] == self.board[start+2*delta] else 0
 
     def check_lines(self):
-        for i in range(3):
+        for i in xrange(3):
             yield self.check_line(i*3, 1)   # horizontal
             yield self.check_line(i, 3)     # vertical
 
@@ -62,7 +60,7 @@ class Board:
         """ If a player has three in a row, return 1 or 2 depending on which player.
             Otherwise, return 0. """
         try:
-            return next((c for c in self.check_lines() if c != 0))
+            return (c for c in self.check_lines() if c != 0).next()
         except StopIteration:
             return 0
 
